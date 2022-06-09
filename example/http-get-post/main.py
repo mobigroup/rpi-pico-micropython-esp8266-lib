@@ -1,4 +1,4 @@
-from machine import UART, Pin
+from machine import Pin
 from esp8266 import ESP8266
 import time, sys
 
@@ -6,19 +6,16 @@ print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print("RPi-Pico MicroPython Ver:", sys.version)
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
-
 ## Create On-board Led object
 led=Pin(25,Pin.OUT)
 
-## Create an ESP8266 Object
-esp01 = ESP8266()
+## Create an ESP8266 Object for LilyGO T-PicoC3
+esp01 = ESP8266(uartPort=1, baudRate=115200, txPin=(8), rxPin=(9))
 esp8266_at_ver = None
 
 print("StartUP",esp01.startUP())
-#print("ReStart",esp01.reStart())
-print("StartUP",esp01.startUP())
 print("Echo-Off",esp01.echoING())
-print("\r\n\r\n")
+print()
 
 '''
 Print ESP8266 AT comand version and SDK details
@@ -30,30 +27,27 @@ if(esp8266_at_ver != None):
 '''
 set the current WiFi in SoftAP+STA
 '''
-esp01.setCurrentWiFiMode()
-
-#apList = esp01.getAvailableAPs()
-#for items in apList:
-#    print(items)
-    #for item in tuple(items):
-    #    print(item)
-  
-print("\r\n\r\n")
+print("WiFi AP List:")
+apList = esp01.getAvailableAPs()
+for items in apList:
+    print(items)
+print()
+print("WiFi Current Mode:",esp01.setCurrentWiFiMode())
+print()
 
 '''
 Connect with the WiFi
 '''
 print("Try to connect with the WiFi..")
 while (1):
-    if "WIFI CONNECTED" in esp01.connectWiFi("ssid","pwd"):
+    if "WIFI CONNECTED" in esp01.connectWiFi("SSID","PWD"):
         print("ESP8266 connect with the WiFi..")
         break;
     else:
         print(".")
         time.sleep(2)
 
-
-print("\r\n\r\n")
+print()
 print("Now it's time to start HTTP Get/Post Operation.......\r\n")
 
 while(1):    
@@ -79,6 +73,3 @@ while(1):
     print("HTTP Code:",httpCode)
     print("HTTP Response:",httpRes)
     print("--------------------------------------------------------------------------------\r\n\r\n")
-    #break
-    
-

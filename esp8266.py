@@ -257,7 +257,7 @@ class ESP8266:
             False on failed set the current wifi mode
         
         """
-        txData="AT+CWMODE_CUR="+str(mode)+"\r\n"
+        txData="AT+CWMODE="+str(mode)+"\r\n"
         retData = self._sendToESP8266(txData)
         if(retData!=None):
             if ESP8266_OK_STATUS in retData:   
@@ -353,7 +353,7 @@ class ESP8266:
             WIFI AP NOT FOUND when ESP8266 cann't find the target AP
             WIFI CONNECTED when ESP8266 successfully connect with the target AP
         """
-        txData="AT+CWJAP_CUR="+'"'+ssid+'"'+','+'"'+pwd+'"'+"\r\n"
+        txData="AT+CWJAP="+'"'+ssid+'"'+','+'"'+pwd+'"'+"\r\n"
         #print(txData)
         retData = self._sendToESP8266(txData, delay=15)
         #print(".....")
@@ -459,7 +459,7 @@ class ESP8266:
             return 0, None
             
         
-    def doHttpPost(self,host,path,user_agent="RPi-Pico",content_type,content,port=80):
+    def doHttpPost(self,host,path,user_agent,content_type,content,port=80):
         """
         This fucntion use to complete a HTTP Post operation
         
@@ -504,4 +504,3 @@ class ESP8266:
         """
         print('Destructor called, ESP8266 deleted.')
         pass
-        
